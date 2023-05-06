@@ -1,6 +1,6 @@
 import express from "express";
-import cartsRouter from "./routes/cartsRoutes.js";
-import productsRouter from "./routes/productsRoutes.js";
+import cartRouter from "./routes/cartsRoutes.js";
+import productRouter from "./routes/productsRoutes.js";
 import path from "path";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
@@ -26,8 +26,8 @@ void (async () => {
     console.log("Server is listening on port 8080...");
   });
 
-  app.get("/api/products", productsRouter); //Listo
-  app.get("/api/products/:id", productsRouter); //Listo
+  app.get("/api/products", productRouter);
+  app.get("/api/products/:id", productRouter);
   app.post(
     "/api/products",
     body(
@@ -38,8 +38,8 @@ void (async () => {
       "code",
       "stat"
     ).notEmpty(),
-    productsRouter
-  ); //Listo
+    productRouter
+  );
   app.put(
     "/api/products",
     body(
@@ -51,14 +51,14 @@ void (async () => {
       "code",
       "stat"
     ).notEmpty(),
-    productsRouter
-  ); //Listo
-  app.delete("/api/products", productsRouter); //Listo
-  //app.get("/api/realtimeproducts", productsRouter);
+    productRouter
+  );
+  app.delete("/api/products", productRouter);
+  //app.get("/api/realtimeproducts", productRouter);
 
-  app.get(`/api/carts`, cartsRouter);
-  app.get("/api/carts/:id", cartsRouter);
-  app.post("/api/carts", cartsRouter);
-  app.put("/api/carts", cartsRouter);
-  app.delete("/api/carts", cartsRouter);
+  app.get(`/api/carts`, cartRouter);
+  app.get("/api/carts/:id", cartRouter);
+  app.post("/api/carts", cartRouter);
+  app.put("/api/carts", cartRouter);
+  app.delete("/api/carts", cartRouter);
 })();

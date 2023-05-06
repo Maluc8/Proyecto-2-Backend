@@ -20,7 +20,7 @@ class ProductsMongooseDao {
 
   async getOne(id) {
     let product = await productsSchema.find({ _id: id });
-    console.log("productMongooseDao getOne\n", product);
+    //console.log("productMongooseDao getOne\n", product);
     product = product.map((product) => ({
       id: product._id.toString(),
       title: product.title,
@@ -47,7 +47,7 @@ class ProductsMongooseDao {
       stock: product.stock,
       stat: product.stat,
     };
-    console.log("productMongooseDao create\n", product);
+    //console.log("productMongooseDao create\n", product);
     return product;
   }
 
@@ -61,7 +61,7 @@ class ProductsMongooseDao {
   async deleteOne(id) {
     let product = await productsSchema.find({ _id: id });
     product[0].stat = false;
-    console.log("productsMongooseDao deleteOne\n", product);
+    //console.log("productsMongooseDao deleteOne\n", product);
     return productsSchema.updateOne({ _id: id }, product[0]);
   }
 

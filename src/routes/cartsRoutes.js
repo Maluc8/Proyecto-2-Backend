@@ -1,16 +1,20 @@
-import { Router } from "express";
-import express from "express";
-import cartsManager from "../managers/cartsManagers.js";
+import express, { Router } from "express";
+import {
+  list,
+  deleteOne,
+  getOne,
+  create,
+  updateOne,
+} from "../controllers/cartsController.js";
 
-const cartsRouter = Router();
-const manager = new cartsManager();
+const cartRouter = Router();
 
-cartsRouter.use(express.json());
+cartRouter.use(express.json());
 
-cartsRouter.get("/api/carts", manager.list);
-cartsRouter.get("/api/carts/:id", manager.getOne);
-cartsRouter.post("/api/carts", manager.create);
-cartsRouter.put("/api/carts", manager.updateOne);
-cartsRouter.delete("/api/carts", manager.deleteOne);
+cartRouter.get("/api/carts", list);
+cartRouter.get("/api/carts/:id", getOne);
+cartRouter.post("/api/carts", create);
+cartRouter.put("/api/carts", updateOne);
+cartRouter.delete("/api/carts", deleteOne);
 
-export default cartsRouter;
+export default cartRouter;

@@ -6,22 +6,23 @@ class cartsManager {
   }
 
   async list() {
-    return this.cartsDao.find();
+    const carts = await this.cartsDao.find();
+    return carts;
   }
 
   async getOne(id) {
-    return this.cartsDao.getOne(id);
+    let cart = await this.cartsDao.getOne(id);
+    return cart;
   }
 
   async create(data) {
     const cart = await this.cartsDao.create(data);
-
-    //Le falta logica de negocio
     return cart;
   }
 
   async updateOne(id, data) {
-    return this.cartsDao.updateOne(id, data);
+    const cart = await this.cartsDao.updateOne(id, data);
+    return cart;
   }
 
   async deleteOne(id) {
