@@ -10,6 +10,7 @@ export const list = async (req, res) => {
     type = {};
   }
   sort = sort == "asc" ? { price: 1 } : sort == "desc" ? { price: -1 } : {};
+  limit = !limit ? 10 : limit;
   try {
     const manager = new productsManager();
     products = await manager.find(type, { limit, page, sort });
@@ -18,7 +19,7 @@ export const list = async (req, res) => {
     res.send({ status: `error` });
     return;
   }
-  res.send({ status: `success`, response: products });
+  res.send({ status: `success`, ...products });
 };
 
 export const deleteOne = async (req, res) => {

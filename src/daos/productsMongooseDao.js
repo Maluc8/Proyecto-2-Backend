@@ -4,7 +4,7 @@ class ProductsMongooseDao {
   async find(filter, query) {
     console.log("productsMongooseDao query\n", query);
     let list = await productsSchema.paginate(filter, query);
-    list.productcs = list.docs.map((product) => ({
+    list.payload = list.docs.map((product) => ({
       id: product._id.toString(),
       title: product.title,
       description: product.description,
