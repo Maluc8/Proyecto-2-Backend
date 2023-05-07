@@ -1,4 +1,3 @@
-//import { error } from "console";
 import productsMongooseDao from "../daos/productsMongooseDao.js";
 
 class productsManager {
@@ -6,22 +5,18 @@ class productsManager {
     this.productsDao = new productsMongooseDao();
   }
 
-  async find() {
-    return this.productsDao.find();
+  async find(filter, query) {
+    return this.productsDao.find(filter, query);
   }
 
   async getOne(data) {
-    //console.log("ProductsManager getOne", data);
     return this.productsDao.getOne(data);
   }
 
   async create(data) {
-    //console.log("ProductManager create/n", data);
     let exist = await this.productsDao.findCode(data.code);
-    //console.log("productsManagers create\nExiste? ", exist.length);
     if (!exist.length) {
       const product = await this.productsDao.create(data);
-      //console.log("productsManagers create\n", product);
       return product;
     } else {
       return false;

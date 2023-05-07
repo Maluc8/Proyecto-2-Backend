@@ -2,21 +2,28 @@ import productsManager from "../managers/productsManagers.js";
 
 export const list = async (req, res) => {
   let products;
+  let { limit, page, type, sort } = { ...req.query };
+  if (type) {
+    type = `{ ${type}}`;
+    type = JSON.parse(type);
+  } else {
+    type = {};
+  }
+  sort = sort == "asc" ? { price: 1 } : sort == "desc" ? { price: -1 } : {};
   try {
     const manager = new productsManager();
-    products = await manager.find();
+    products = await manager.find(type, { limit, page, sort });
   } catch (e) {
     console.error(e);
     res.send({ status: `error` });
     return;
   }
-  res.send({ status: `success`, products });
+  res.send({ status: `success`, response: products });
 };
 
 export const deleteOne = async (req, res) => {
   try {
     const manager = new productsManager();
-    //Aca estael problema?
     const success = await manager.deleteOne(req.body.id);
   } catch (e) {
     console.error(e);
@@ -29,7 +36,6 @@ export const deleteOne = async (req, res) => {
 export const getOne = async (req, res) => {
   let products;
   try {
-    //console.log("productsController getOne\n", req.params.id);
     const manager = new productsManager();
     products = await manager.getOne(req.params.id);
   } catch (e) {
@@ -41,7 +47,6 @@ export const getOne = async (req, res) => {
 };
 
 export const save = async (req, res) => {
-  //console.log("Dentro de productsController Save");
   let products;
   try {
     const manager = new productsManager();
@@ -72,7 +77,6 @@ export const update = async (req, res) => {
       stock: req.body.stock,
       stat: req.body.stat,
     };
-    //console.log("productsController update\n", id, "\n", data);
     success = await manager.updateOne(id, data);
   } catch (e) {
     console.error(e);
