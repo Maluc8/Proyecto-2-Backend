@@ -61,4 +61,5 @@ void (async () => {
   app.post("/api/carts", cartRouter);
   app.put("/api/carts", cartRouter);
   app.delete("/api/carts", cartRouter);
+  app.delete("/api/carts/:cid/products/:pid", cartRouter);
 })();

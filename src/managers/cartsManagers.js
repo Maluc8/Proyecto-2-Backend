@@ -26,7 +26,11 @@ class cartsManager {
   }
 
   async deleteOne(id) {
-    return this.cartsDao.deleteOne(id);
+    return await this.cartsDao.deleteOne(id);
+  }
+
+  async deleteOneProduct(data) {
+    return await this.cartsDao.deleteOneProduct(data);
   }
 }
 export default cartsManager;

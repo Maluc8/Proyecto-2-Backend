@@ -28,3 +28,23 @@ export const updateOne = async (req, res) => {
   );
   res.send({ status: "success", carts });
 };
+
+export const deleteOneProduct = async (req, res) => {
+  console.log("cartsController deleteOneProduct req.param", req.params);
+  const { cid, pid } = req.params;
+  console.log(
+    "cartsController deleteOneProduct cartID\n",
+    cid,
+    "\nproductId\n",
+    pid
+  );
+  const manager = new cartsManager();
+  const cart = await manager.getOne({ _id: cid });
+  let newProducts = cart.products.filter((product) => product.id != pid);
+  console.log(
+    "cartsController deleteOneProduct cart.products\n",
+    cart.products
+  );
+  const newCart = await manager.updateOne(cid, newProducts);
+  res.send({ status: "succes", cart });
+};
