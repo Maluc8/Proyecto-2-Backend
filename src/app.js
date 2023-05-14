@@ -1,18 +1,39 @@
 import express from "express";
-import cartRouter from "./routes/cartsRoutes.js";
-import productRouter from "./routes/productsRoutes.js";
 import path from "path";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import { body } from "express-validator";
+import mongoStore from "connect-mongo";
+import cookieParser from "cookie-parser";
+
+import cartRouter from "./routes/cartsRoutes.js";
+import productRouter from "./routes/productsRoutes.js";
+import sessionRouter from "./routes/sessionRoutes.js";
+import userRouter from "./routes/userRoutes.js";
 
 dotenv.config();
 
 const app = express();
-const viewsPath = path.resolve("./views");
-const publicPath = path.resolve("./public");
+//const viewsPath = path.resolve("./views");
+//const publicPath = path.resolve("./public");
 
-app.use(express.static(publicPath));
+//app.use(express.static(publicPath));
+app.use(express.urlencoded({ etended: true }));
+app.use(cookieParser());
+app.use(
+  session({
+    store: mongoStore.create({
+      mongoUrl: process.env.MONGO_DB_URI,
+      ttl: 10,
+    }),
+    secret: "CoderS3cR3tC0d3",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+initializePassport();
+app.use("/api/sessions", sessionRouter);
+app.use("/api/users", userRouter);
 
 void (async () => {
   await mongoose
@@ -25,6 +46,8 @@ void (async () => {
   app.listen(8080, () => {
     console.log("Server is listening on port 8080...");
   });
+
+  //Products
 
   app.get("/api/products", productRouter);
   app.get("/api/products/:id", productRouter);
@@ -56,10 +79,17 @@ void (async () => {
   app.delete("/api/products", productRouter);
   //app.get("/api/realtimeproducts", productRouter);
 
+  //Carts
+
   app.get(`/api/carts`, cartRouter);
   app.get("/api/carts/:id", cartRouter);
   app.post("/api/carts", cartRouter);
   app.put("/api/carts", cartRouter);
+  app.put("/api/carts/:cid/products/:pid", cartRouter);
   app.delete("/api/carts", cartRouter);
   app.delete("/api/carts/:cid/products/:pid", cartRouter);
+
+  //Users
+
+  app.get();
 })();

@@ -30,21 +30,24 @@ export const updateOne = async (req, res) => {
 };
 
 export const deleteOneProduct = async (req, res) => {
-  console.log("cartsController deleteOneProduct req.param", req.params);
   const { cid, pid } = req.params;
-  console.log(
-    "cartsController deleteOneProduct cartID\n",
-    cid,
-    "\nproductId\n",
-    pid
-  );
   const manager = new cartsManager();
   const cart = await manager.getOne({ _id: cid });
   let newProducts = cart.products.filter((product) => product.id != pid);
-  console.log(
-    "cartsController deleteOneProduct cart.products\n",
-    cart.products
-  );
   const newCart = await manager.updateOne(cid, newProducts);
-  res.send({ status: "succes", cart });
+  res.send({ status: "succes", newCart });
+};
+
+export const updateQuantity = async (req, res) => {
+  console.log("cartsController updateQuantity req body", req.body);
+  const manager = new cartsManager();
+  const cart = await manager.getOne({ _id: req.params.cid });
+  let newProducts = cart.products.map((product) => {
+    if (product._id == req.params.pid) {
+      product.quantity = req.body.quantity;
+    }
+    return product;
+  });
+  const newCart = await manager.updateOne(req.params.cid, newProducts);
+  res.send({ status: "succes", newCart });
 };
