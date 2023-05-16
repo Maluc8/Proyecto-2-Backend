@@ -1,5 +1,11 @@
 import productsManager from "../managers/productsManagers.js";
 
+/**
+ * Endpoint que devuelve una lista de productos en base a un filtro, paginación y ordenamiento.
+ *
+ * @param {Object} req - Objeto request de Express.
+ * @param {Object} res - Objeto response de Express.
+ */
 export const list = async (req, res) => {
   let products;
   let { limit, page, type, sort } = { ...req.query };
@@ -16,12 +22,18 @@ export const list = async (req, res) => {
     products = await manager.find(type, { limit, page, sort });
   } catch (e) {
     console.error(e);
-    res.send({ status: `error` });
+    res.send({ status: `error` }, e);
     return;
   }
   res.send({ status: `success`, ...products });
 };
 
+/**
+ * Endpoint que elimina un producto a partir de su ID.
+ *
+ * @param {Object} req - Objeto request de Express.
+ * @param {Object} res - Objeto response de Express.
+ */
 export const deleteOne = async (req, res) => {
   try {
     const manager = new productsManager();
@@ -34,6 +46,12 @@ export const deleteOne = async (req, res) => {
   }
 };
 
+/**
+ * Endpoint que devuelve un producto a partir de su ID.
+ *
+ * @param {Object} req - Objeto request de Express.
+ * @param {Object} res - Objeto response de Express.
+ */
 export const getOne = async (req, res) => {
   let products;
   try {
@@ -41,12 +59,18 @@ export const getOne = async (req, res) => {
     products = await manager.getOne(req.params.id);
   } catch (e) {
     console.error(e);
-    res.send({ status: `error` });
+    res.send({ status: `error` }, e);
   } finally {
     res.send({ status: `success`, products });
   }
 };
 
+/**
+ * Endpoint que crea un producto.
+ *
+ * @param {Object} req - Objeto request de Express.
+ * @param {Object} res - Objeto response de Express.
+ */
 export const save = async (req, res) => {
   let products;
   try {
@@ -54,7 +78,7 @@ export const save = async (req, res) => {
     products = await manager.create(req.body);
   } catch (e) {
     console.error(e);
-    res.send({ status: `error` });
+    res.send({ status: `error` }, e);
     return;
   }
   if (products) {
@@ -64,6 +88,12 @@ export const save = async (req, res) => {
   }
 };
 
+/**
+ * Endpoint que actualiza un producto a partir de su ID y un objeto con los nuevos valores.
+ *
+ * @param {Object} req - Objeto request de Express.
+ * @param {Object} res - Objeto response de Express.
+ */
 export const update = async (req, res) => {
   let success;
   try {
@@ -81,13 +111,11 @@ export const update = async (req, res) => {
     success = await manager.updateOne(id, data);
   } catch (e) {
     console.error(e);
-    res.send({ status: `Error` });
-  } finally {
-    console.log("productsController updateOne\n", success);
-    if (success) {
-      res.send({ status: `success` });
-    } else {
-      res.send({ status: `No se encontro` });
-    }
+    res.send({ status: `Error` }, e);
+  }
+  if (success) {
+    res.send({ status: `success` });
+  } else {
+    res.send({ status: `No se encontro` });
   }
 };

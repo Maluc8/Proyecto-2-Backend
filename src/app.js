@@ -1,5 +1,5 @@
 import express from "express";
-import path from "path";
+//import path from "path";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import { body } from "express-validator";
@@ -88,6 +88,7 @@ void (async () => {
   app.put("/api/carts/:cid/products/:pid", cartRouter);
   app.delete("/api/carts", cartRouter);
   app.delete("/api/carts/:cid/products/:pid", cartRouter);
+  app.delete("/api/carts/:cid", cartRouter);
 
   //Users
 

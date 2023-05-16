@@ -39,7 +39,6 @@ export const deleteOneProduct = async (req, res) => {
 };
 
 export const updateQuantity = async (req, res) => {
-  console.log("cartsController updateQuantity req body", req.body);
   const manager = new cartsManager();
   const cart = await manager.getOne({ _id: req.params.cid });
   let newProducts = cart.products.map((product) => {
@@ -49,5 +48,12 @@ export const updateQuantity = async (req, res) => {
     return product;
   });
   const newCart = await manager.updateOne(req.params.cid, newProducts);
+  res.send({ status: "succes", newCart });
+};
+
+export const deleteAllproducts = async (req, res) => {
+  const manager = new cartsManager();
+  const cart = await manager.getOne({ _id: req.params.cid });
+  const newCart = await manager.updateOne(req.params.cid, {});
   res.send({ status: "succes", newCart });
 };
